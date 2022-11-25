@@ -1,5 +1,5 @@
 import sys
-from KEPModel import KEPModel
+from KEPData import KEPData
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     file_path = argv[0]
 
-    instance = KEPModel(file_path=file_path)
+    instance = KEPData(file_path=file_path)
     print(instance)
 
     return 0

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class KEPModel:
+class KEPData:
     def __parse__(file_path: str):
         try:
             with open(file_path, "r") as file:
@@ -27,8 +27,8 @@ class KEPModel:
             exit(1)
 
     def __init__(self, file_path: str):
-        KEPModel.__parse__(file_path)
-        self.nb_vertices, self.nb_edges, self.adjacency_matrix = KEPModel.__parse__(
+        KEPData.__parse__(file_path)
+        self.nb_vertices, self.nb_edges, self.adjacency_matrix = KEPData.__parse__(
             file_path
         )
         self.name = "Instance n°" + file_path.split("/")[-1].split(".")[0]
