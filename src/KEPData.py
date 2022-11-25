@@ -1,6 +1,20 @@
 import numpy as np
 
 
+class Edge:
+    def __init__(self, node_1, node_2, weight, edge_id):
+        self.node_1 = node_1
+        self.node_2 = node_2
+        self.weight = weight
+        self.edge_id = edge_id
+
+    def __str__(self):
+        return f"({self.node_1}, {self.node_2}, {self.weight})"
+
+    def __repr__(self):
+        return str(self)
+
+
 class KEPData:
     def __parse__(file_path: str):
         try:
@@ -17,20 +31,30 @@ class KEPData:
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
                 # save all this information in an adjacency matrix
                 adjacency_matrix = np.full((nb_vertices + 1, nb_vertices + 1), -1)
+                # and in a list of edges
+                list_of_edges = []
+                cpt = 1
                 for line in data:
                     source, destination, weight = line.split(",")
                     adjacency_matrix[int(source)][int(destination)] = float(weight)
+                    list_of_edges.append(
+                        Edge(int(source), int(destination), float(weight), cpt)
+                    )
+                    cpt += 1
             file.close()
-            return nb_vertices, nb_edges, adjacency_matrix
+            return nb_vertices, nb_edges, adjacency_matrix, list_of_edges
         except FileNotFoundError:
             print("Error: File not found.")
             exit(1)
 
     def __init__(self, file_path: str, K: int, L: int):
         KEPData.__parse__(file_path)
-        self.nb_vertices, self.nb_edges, self.adjacency_matrix = KEPData.__parse__(
-            file_path
-        )
+        (
+            self.nb_vertices,
+            self.nb_edges,
+            self.adjacency_matrix,
+            self.list_of_edges,
+        ) = KEPData.__parse__(file_path)
         # L must be greater than K
         if L <= K:
             print("Error: L must be greater than K. With K > 2.")
@@ -64,3 +88,6 @@ class KEPData:
 
     def print_adjacency_matrix(self):
         print(self.adjacency_matrix)
+
+    def print_list_of_edges(self):
+        print(self.list_of_edges)
