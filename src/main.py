@@ -12,6 +12,7 @@ def main():
     file_path = argv[0]
 
     instance = KEPModel(file_path=file_path)
+    print(instance)
 
     return 0
 

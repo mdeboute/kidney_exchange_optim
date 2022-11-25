@@ -16,7 +16,7 @@ class KEPModel:
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
                 # save all this information in an adjacency matrix
-                adjacency_matrix = np.zeros((nb_vertices, nb_vertices))
+                adjacency_matrix = np.zeros((nb_vertices + 1, nb_vertices + 1))
                 for line in data:
                     source, destination, weight = line.split(",")
                     adjacency_matrix[int(source)][int(destination)] = float(weight)
@@ -31,3 +31,17 @@ class KEPModel:
         self.nb_vertices, self.nb_edges, self.adjacency_matrix = KEPModel.__parse__(
             file_path
         )
+        self.name = "Instance n°" + file_path.split("/")[-1].split(".")[0]
+
+    def __str__(self):
+        return (
+            self.name
+            + " with "
+            + str(self.nb_vertices)
+            + " vertices and "
+            + str(self.nb_edges)
+            + " edges."
+        )
+
+    def __repr__(self):
+        return self.__str__()
