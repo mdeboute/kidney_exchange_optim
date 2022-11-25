@@ -16,7 +16,7 @@ class KEPData:
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
                 # save all this information in an adjacency matrix
-                adjacency_matrix = np.zeros((nb_vertices + 1, nb_vertices + 1))
+                adjacency_matrix = np.full((nb_vertices + 1, nb_vertices + 1), -1)
                 for line in data:
                     source, destination, weight = line.split(",")
                     adjacency_matrix[int(source)][int(destination)] = float(weight)
@@ -26,11 +26,17 @@ class KEPData:
             print("Error: File not found.")
             exit(1)
 
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str, K: int, L: int):
         KEPData.__parse__(file_path)
         self.nb_vertices, self.nb_edges, self.adjacency_matrix = KEPData.__parse__(
             file_path
         )
+        # L must be greater than K
+        if L <= K:
+            print("Error: L must be greater than K. With K > 2.")
+            exit(1)
+        self.K = K
+        self.L = L
         self.name = "Instance n°" + file_path.split("/")[-1].split(".")[0]
 
     def __str__(self):
@@ -41,6 +47,10 @@ class KEPData:
             + " vertices and "
             + str(self.nb_edges)
             + " edges."
+            + " K = "
+            + str(self.K)
+            + " and L = "
+            + str(self.L)
         )
 
     def __repr__(self):
