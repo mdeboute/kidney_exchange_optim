@@ -42,7 +42,7 @@ class KEPData:
     def __str__(self):
         return (
             self.name
-            + " with "
+            + ": graph with "
             + str(self.nb_vertices)
             + " vertices and "
             + str(self.nb_edges)
@@ -55,3 +55,12 @@ class KEPData:
 
     def __repr__(self):
         return self.__str__()
+
+    def get_number_of_altruists(self):
+        # count the number of 0 in the adjacency matrix divided by the number of vertices
+        return int(
+            np.ceil(np.count_nonzero(self.adjacency_matrix == 0) / self.nb_vertices)
+        )
+
+    def print_adjacency_matrix(self):
+        print(self.adjacency_matrix)
