@@ -18,9 +18,7 @@ def main():
 
     file_path = argv[0]
     instance = KEPData(file_path=file_path, K=3, L=5)
-    print(
-        f"There are {instance.get_number_of_altruists()} altruists in {instance.name}"
-    )
+    print(instance)
 
     return 0
 

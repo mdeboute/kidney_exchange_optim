@@ -26,6 +26,10 @@ class KEPData:
                 nb_vertices = int(data[0].split(":")[1])
                 # split the line 11 by ":" and save the second part as the number of edges
                 nb_edges = int(data[1].split(":")[1])
+                # from line 12 to line 12 + nb_vertices - 1, count the number of line with "Alturist" in it
+                nb_alturists = sum(
+                    [1 for line in data[3 : nb_vertices + 2] if "Alturist" in line]
+                )
                 # from line 11 skip all the lines that begins with #
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
@@ -42,7 +46,7 @@ class KEPData:
                     )
                     cpt += 1
             file.close()
-            return nb_vertices, nb_edges, adjacency_matrix, list_of_edges
+            return nb_vertices, nb_edges, nb_alturists, adjacency_matrix, list_of_edges
         except FileNotFoundError:
             print("Error: File not found.")
             exit(1)
@@ -52,6 +56,7 @@ class KEPData:
         (
             self.nb_vertices,
             self.nb_edges,
+            self.nb_alturists,
             self.adjacency_matrix,
             self.list_of_edges,
         ) = KEPData.__parse__(file_path)
@@ -75,19 +80,17 @@ class KEPData:
             + str(self.K)
             + " and L = "
             + str(self.L)
+            + ". Number of alturists: "
+            + str(self.nb_alturists)
         )
 
     def __repr__(self):
         return self.__str__()
-
-    def get_number_of_altruists(self):
-        # count the number of 0 in the adjacency matrix divided by the number of vertices
-        return int(
-            np.ceil(np.count_nonzero(self.adjacency_matrix == 0) / self.nb_vertices)
-        )
 
     def print_adjacency_matrix(self):
         print(self.adjacency_matrix)
 
     def print_list_of_edges(self):
         print(self.list_of_edges)
+
+    # TODO: implement a method to get all possible cycles the graph that do not contain any alturist
