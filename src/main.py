@@ -19,6 +19,7 @@ def main():
     file_path = argv[0]
     instance = KEPData(file_path=file_path, K=3, L=5)
     print(instance)
+    print(instance.list_of_altruists)
 
     return 0
 

@@ -26,10 +26,11 @@ class KEPData:
                 nb_vertices = int(data[0].split(":")[1])
                 # split the line 11 by ":" and save the second part as the number of edges
                 nb_edges = int(data[1].split(":")[1])
-                # from line 12 to line 12 + nb_vertices - 1, count the number of line with "Alturist" in it
-                nb_alturists = sum(
-                    [1 for line in data[3 : nb_vertices + 2] if "Alturist" in line]
-                )
+                # from line 12 to line 12 + nb_vertices - 1, count the number of line with "Alturist" and put it in a list
+                list_of_altruists = []
+                for line in data[3 : nb_vertices + 2]:
+                    if "Alturist" in line:
+                        list_of_altruists.append(int(line.split(" ")[-1]))
                 # from line 11 skip all the lines that begins with #
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
@@ -46,7 +47,13 @@ class KEPData:
                     )
                     cpt += 1
             file.close()
-            return nb_vertices, nb_edges, nb_alturists, adjacency_matrix, list_of_edges
+            return (
+                nb_vertices,
+                nb_edges,
+                list_of_altruists,
+                adjacency_matrix,
+                list_of_edges,
+            )
         except FileNotFoundError:
             print("Error: File not found.")
             exit(1)
@@ -56,7 +63,7 @@ class KEPData:
         (
             self.nb_vertices,
             self.nb_edges,
-            self.nb_alturists,
+            self.list_of_altruists,
             self.adjacency_matrix,
             self.list_of_edges,
         ) = KEPData.__parse__(file_path)
@@ -81,7 +88,7 @@ class KEPData:
             + " and L = "
             + str(self.L)
             + ". Number of alturists: "
-            + str(self.nb_alturists)
+            + str(len(self.list_of_altruists))
         )
 
     def __repr__(self):
