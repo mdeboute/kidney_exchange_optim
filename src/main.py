@@ -19,7 +19,7 @@ def main():
     file_path = argv[0]
     instance = KEPData(file_path=file_path, K=3, L=5)
     print(instance)
-    print(instance.list_of_altruists)
+    print(instance.get_all_possible_cycles())
 
     return 0
 

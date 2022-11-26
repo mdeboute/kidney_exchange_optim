@@ -38,7 +38,7 @@ class KEPData:
                 adjacency_matrix = np.full((nb_vertices + 1, nb_vertices + 1), -1)
                 # and in a list of edges
                 list_of_edges = []
-                cpt = 1
+                cpt = 0
                 for line in data:
                     source, destination, weight = line.split(",")
                     adjacency_matrix[int(source)][int(destination)] = float(weight)
@@ -94,10 +94,32 @@ class KEPData:
     def __repr__(self):
         return self.__str__()
 
-    def print_adjacency_matrix(self):
-        print(self.adjacency_matrix)
+    def get_adjacency_list(self):
+        adj = [[] for _ in range(self.nb_vertices + 1)]
+        for edge in self.list_of_edges:
+            adj[edge.node_1].append(edge.node_2)
+        return adj
 
-    def print_list_of_edges(self):
-        print(self.list_of_edges)
+    def get_all_possible_cycles(self):
+        # get all possible cycles of the graph that does not contain any alturist
+        # and that has a maximal length equal to K
+        adj = self.get_adjacency_list()
+        cycles = []
+        for i in range(1, self.nb_vertices + 1):
+            for j in adj[i]:
+                if i != j:
+                    cycles.append([i, j])
+        for i in range(2, self.K):
+            new_cycles = []
+            for cycle in cycles:
+                for j in adj[cycle[-1]]:
+                    if j not in cycle:
+                        new_cycles.append(cycle + [j])
+            cycles = new_cycles
+        # remove all the cycles that contains an alturist
+        for cycle in cycles:
+            if any([node in self.list_of_altruists for node in cycle]):
+                cycles.remove(cycle)
+        return cycles
 
-    # TODO: implement a method to get all possible cycles the graph that do not contain any alturist
+        # to verify
