@@ -1,1 +1,2 @@
+LocalSolver==11.5.20221123
 numpy==1.23.5
