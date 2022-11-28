@@ -16,7 +16,7 @@ class Edge:
 
 
 class KEPData:
-    def __parse__(file_path: str):
+    def _parse(file_path: str):
         try:
             with open(file_path, "r") as file:
                 data = file.read()
@@ -59,14 +59,14 @@ class KEPData:
             exit(1)
 
     def __init__(self, file_path: str, K: int, L: int):
-        KEPData.__parse__(file_path)
+        KEPData._parse(file_path)
         (
             self.nb_vertices,
             self.nb_edges,
             self.list_of_altruists,
             self.adjacency_matrix,
             self.list_of_edges,
-        ) = KEPData.__parse__(file_path)
+        ) = KEPData._parse(file_path)
         # L must be greater than K
         if L <= K:
             print("Error: L must be greater than K. With K > 2.")
@@ -122,4 +122,4 @@ class KEPData:
                 cycles.remove(cycle)
         return cycles
 
-        # to verify
+        # TODO: to verify lmao
