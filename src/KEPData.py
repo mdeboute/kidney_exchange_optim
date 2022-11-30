@@ -35,17 +35,18 @@ class KEPData:
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
                 # save all this information in an adjacency matrix
-                adjacency_matrix = np.full((nb_vertices + 1, nb_vertices + 1), -1)
+                adjacency_matrix = np.full((nb_vertices + 1, nb_vertices + 1), 0)
                 # and in a list of edges
                 list_of_edges = []
                 cpt = 0
                 for line in data:
                     source, destination, weight = line.split(",")
-                    adjacency_matrix[int(source)][int(destination)] = float(weight)
-                    list_of_edges.append(
-                        Edge(int(source), int(destination), float(weight), cpt)
-                    )
-                    cpt += 1
+                    adjacency_matrix[int(source)][int(destination)] = int(float(weight))
+                    if float(weight) > 0:
+                        list_of_edges.append(
+                            Edge(int(source), int(destination), int(float(weight)), cpt)
+                        )
+                        cpt += 1
             file.close()
             return (
                 nb_vertices,
@@ -68,8 +69,8 @@ class KEPData:
             self.list_of_edges,
         ) = KEPData._parse(file_path)
         # L must be greater than K
-        if L <= K:
-            print("Error: L must be greater than K. With K > 2.")
+        if L < K:
+            print("Error: L must be greater than or equal to K. With K > 2.")
             exit(1)
         self.K = K
         self.L = L
