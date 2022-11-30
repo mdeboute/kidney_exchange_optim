@@ -68,8 +68,8 @@ class KEPData:
             self.list_of_edges,
         ) = KEPData._parse(file_path)
         # L must be greater than K
-        if L <= K:
-            print("Error: L must be greater than K. With K > 2.")
+        if L < K:
+            print("Error: L must be greater or equal to K. With K > 2.")
             exit(1)
         self.K = K
         self.L = L

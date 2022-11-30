@@ -21,12 +21,13 @@ def main():
     if len(argv) == 3:
         time_limit = int(argv[2])
 
-    instance = KEPData(file_path=file_path)
+    instance = KEPData(file_path=file_path, K=3, L=3)
 
     if method == "LS":
         model = KEPModelLocalSolver(instance=instance)
-        solution = model.solve(time_limit=time_limit)
-        solution.write()
+        model.solve(time_limit=time_limit)
+        #solution = model.solve(time_limit=time_limit)
+        #solution.write()
     elif method == "OR":
         print("OR method not implemented yet")
     else:
