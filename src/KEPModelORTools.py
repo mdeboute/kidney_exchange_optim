@@ -171,7 +171,7 @@ class KEPModelORTools:
             list_of_routes.append(route)
         return KEPSolution(
             self.instance.name, solution.ObjectiveValue(), list_of_routes
-        )  # TODO: verify this
+        )
 
     def solve(self, time_limit: int = 600):
         # Setting first solution heuristic.

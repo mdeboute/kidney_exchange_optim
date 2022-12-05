@@ -1,4 +1,5 @@
 from pathlib import Path
+from KEPData import KEPData
 
 
 class KEPSolution:
@@ -7,14 +8,14 @@ class KEPSolution:
 
     def __init__(
         self,
-        instance_name: str,
+        instance: KEPData,
         objective_value: int,
         list_of_paths: list([list([int])]),
     ):
-        self.instance_name = instance_name
+        self.instance = instance
         self.objective_value = objective_value
         self.list_of_paths = list_of_paths
-        self.name = "Solution of " + instance_name
+        self.name = "Solution of " + instance.name
 
     def __str__(self):
         return (
@@ -28,9 +29,43 @@ class KEPSolution:
     def __repr__(self):
         return self.__str__()
 
-    def check_fasailability(self):
-        # TODO: check if the solution is feasible
-        pass
+    def _is_cycle(self, path: list([int])) -> bool:
+        return path[0] == path[-1]
+
+    def check_feasibility(self):
+        # check if the solution is feasible
+        # the maximum length of a path is L
+        # the maximum length of a cycle is K
+
+        # check if the length of each path is less or equal to L
+        for path in self.list_of_paths:
+            if not self._is_cycle(path) and len(path) > self.instance.L:
+                print(
+                    (
+                        "Error: path "
+                        + str(path)
+                        + " is too long. L = "
+                        + str(self.instance.L)
+                    )
+                )
+                return False
+
+        # check if the length of each cycle is less or equal to K
+        for path in self.list_of_paths:
+            if self._is_cycle(path) and len(path) > self.instance.K:
+                print(
+                    (
+                        "Error: cycle "
+                        + str(path)
+                        + " is too long. K = "
+                        + str(self.instance.K)
+                    )
+                )
+                return False
+
+        # to finish
+
+        return True
 
     def write(self, file_path: str):
         with open(file_path, "w") as f:
