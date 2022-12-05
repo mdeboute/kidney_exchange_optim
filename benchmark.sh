@@ -13,20 +13,19 @@ fi
 
 echo "Experimental Campaign:"
 echo "Data directory: $1"
-echo "Output directory: log/"
+echo "Output directory: solutions/"
 echo "Solver: $2"
 echo "Time limit: $time_limit"
 
-mkdir -p log
-cd log && mkdir -p $2
+cd solutions && mkdir -p $2
 echo `date` > $2/date.txt
 cd ..
 
 for instance in `ls $1` ; do
     echo Resolution of $instance
-    python3 src/main.py $1/$instance $2 $time_limit >> log/$2/log_${instance}
+    python3 src/main.py $1/$instance $2 $time_limit
 done
 
-grep "obj:" log/$2/*.txt >> log/$2/results.csv
+grep "obj:" solutions/*.txt >> solutions/$2/results.csv
 
 exit 0

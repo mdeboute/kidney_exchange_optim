@@ -23,7 +23,7 @@ def main():
         time_limit = int(argv[2])
 
     if method == "LS":
-        instance = KEPData(file_path=file_path, K=3, L=5)
+        instance = KEPData(file_path=file_path, K=3, L=4)
         print(instance)
         model = KEPModelLocalSolver(instance=instance)
         model.solve(time_limit=time_limit)
@@ -34,7 +34,7 @@ def main():
             print("Solution is not feasible!")
             exit(1)
     elif method == "OR":
-        instance = KEPData(file_path=file_path, K=3, L=5)
+        instance = KEPData(file_path=file_path, K=3, L=4)
         print(instance)
         model = KEPModelORTools(instance=instance)
         solution = model.solve(time_limit=time_limit)
