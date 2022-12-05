@@ -100,27 +100,3 @@ class KEPData:
         for edge in self.list_of_edges:
             adj[edge.node_1].append(edge.node_2)
         return adj
-
-    def get_all_possible_cycles(self):
-        # get all possible cycles of the graph that does not contain any alturist
-        # and that has a maximal length equal to K
-        adj = self.get_adjacency_list()
-        cycles = []
-        for i in range(1, self.nb_vertices + 1):
-            for j in adj[i]:
-                if i != j:
-                    cycles.append([i, j])
-        for i in range(2, self.K):
-            new_cycles = []
-            for cycle in cycles:
-                for j in adj[cycle[-1]]:
-                    if j not in cycle:
-                        new_cycles.append(cycle + [j])
-            cycles = new_cycles
-        # remove all the cycles that contains an alturist
-        for cycle in cycles:
-            if any([node in self.list_of_altruists for node in cycle]):
-                cycles.remove(cycle)
-        return cycles
-
-        # TODO: to verify lmao
