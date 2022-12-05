@@ -22,17 +22,16 @@ def main():
     if len(argv) == 3:
         time_limit = int(argv[2])
 
-    instance = KEPData(file_path=file_path, K=3, L=4)
+    instance = KEPData(file_path=file_path, K=3, L=3)
     print(instance)
-    print(instance.adjacency_matrix)
 
     if method == "LS":
         model = KEPModelLocalSolver(instance=instance)
         solution = model.solve(time_limit=time_limit)
-        solution.write()
     elif method == "OR":
         model = KEPModelORTools(instance=instance)
-        model.solve(time_limit=time_limit)
+        solution = model.solve(time_limit=time_limit)
+        solution.write()
     else:
         print("Unknown method: " + method)
         print("Available methods: LS, OR")
