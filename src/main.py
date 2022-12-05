@@ -22,19 +22,27 @@ def main():
     if len(argv) == 3:
         time_limit = int(argv[2])
 
-    instance = KEPData(file_path=file_path, K=3, L=3)
-    print(instance)
-
     if method == "LS":
+        instance = KEPData(file_path=file_path, K=3, L=5)
+        print(instance)
         model = KEPModelLocalSolver(instance=instance)
+        model.solve(time_limit=time_limit)
         solution = model.solve(time_limit=time_limit)
+        if solution.check_feasibility():
+            solution.write()
+        else:
+            print("Solution is not feasible!")
+            exit(1)
     elif method == "OR":
+        instance = KEPData(file_path=file_path, K=3, L=5)
+        print(instance)
         model = KEPModelORTools(instance=instance)
         solution = model.solve(time_limit=time_limit)
         if solution.check_feasibility():
             solution.write()
         else:
             print("Solution is not feasible!")
+            exit(1)
     else:
         print("Unknown method: " + method)
         print("Available methods: LS, OR")
