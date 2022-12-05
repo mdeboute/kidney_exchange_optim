@@ -74,11 +74,15 @@ class KEPData:
             exit(1)
         self.K = K
         self.L = L
-        self.name = "Instance n°" + file_path.split("/")[-1].split(".")[0]
+        if "\\" in file_path:
+            self.name = file_path.split("\\")[-1].split(".")[0]
+        else:
+            self.name = file_path.split("/")[-1].split(".")[0]
 
     def __str__(self):
         return (
-            self.name
+            "Instance n°"
+            + self.name
             + ": graph with "
             + str(self.nb_vertices)
             + " vertices and "

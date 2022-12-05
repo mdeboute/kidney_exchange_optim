@@ -10,7 +10,7 @@ class KEPModelORTools:
         max_weight = max(
             [
                 max(self.instance.adjacency_matrix[i])
-                for i in range(self.instance.nb_vertices+1)
+                for i in range(self.instance.nb_vertices + 1)
             ]
         )
         U = (
@@ -18,15 +18,15 @@ class KEPModelORTools:
         )  # distance between non adjacent vertices
         data_model = {}
         data_model["N"] = self.instance.list_of_altruists
-        data_model["V"] = [i for i in range(1, self.instance.nb_vertices+1)]
+        data_model["V"] = [i for i in range(1, self.instance.nb_vertices + 1)]
         data_model["P"] = [i for i in data_model["V"] if i not in data_model["N"]]
         data_model["L"] = self.instance.L
         data_model["K"] = self.instance.K
         data_model["weight_limit"] = U
         data_model["cost_matrix"] = []
-        for i in range(self.instance.nb_vertices+1):
+        for i in range(self.instance.nb_vertices + 1):
             cost_line_i = []
-            for j in range(self.instance.nb_vertices+1):
+            for j in range(self.instance.nb_vertices + 1):
                 if i == j:
                     cost_line_i.append(0)
                 elif i == 0 or j == 0:
@@ -170,17 +170,19 @@ class KEPModelORTools:
                 node_index = self.manager.IndexToNode(index)
                 route.append(node_index)
                 if len(route) > 1:
-                    route_cost += self.instance.adjacency_matrix[route[len(route) - 2]][route[len(route) - 1]]
+                    route_cost += self.instance.adjacency_matrix[route[len(route) - 2]][
+                        route[len(route) - 1]
+                    ]
                 index = solution.Value(self.routing.NextVar(index))
             if len(route) > 1:
                 if route[0] not in self.instance.list_of_altruists:
                     route.append(route[0])
-                    route_cost += self.instance.adjacency_matrix[route[len(route) - 2]][route[len(route) - 1]]
+                    route_cost += self.instance.adjacency_matrix[route[len(route) - 2]][
+                        route[len(route) - 1]
+                    ]
                 list_of_routes.append(route)
                 total_cost += route_cost
-        return KEPSolution(
-            self.instance, total_cost, list_of_routes
-        )  
+        return KEPSolution(self.instance, total_cost, list_of_routes)
 
     def solve(self, time_limit: int = 600):
         # Setting first solution heuristic.

@@ -4,7 +4,8 @@ from KEPData import KEPData
 
 class KEPSolution:
     _BASE_DIR = Path(__file__).resolve().parent.parent
-    _SOLUTION_DIR = str(_BASE_DIR) + "/solution/"
+    _SOLUTION_DIR = _BASE_DIR / "solutions"
+    _SOLUTION_DIR.mkdir(parents=True, exist_ok=True)
 
     def __init__(
         self,
@@ -15,7 +16,6 @@ class KEPSolution:
         self.instance = instance
         self.objective_value = objective_value
         self.list_of_paths = list_of_paths
-        self.name = "Solution of " + instance.name
 
     def __str__(self):
         return (
@@ -68,7 +68,9 @@ class KEPSolution:
         return True
 
     def write(self):
-        file_path = self._SOLUTION_DIR + self.instance.name + ".txt"
+        file_path = KEPSolution._SOLUTION_DIR / (
+            "result_" + self.instance.name + ".txt"
+        )
         with open(file_path, "w") as f:
             f.write(str(self.objective_value) + "\n")
             for path in self.list_of_paths:
