@@ -15,7 +15,7 @@ class KEPModelORTools:
         data_model['P'] = [i for i in data_model['V']) if i not in data_model['N']]
         data_model['L'] = self.instance.L
         data_model['K'] = self.instance.K
-        data_model['U'] = U
+        data_model['weight_limit'] = U
         data_model['cost_matrix'] = [] 
         for i in range(self.instance.nb_vertices+1):
             cost_line_i = []
@@ -58,8 +58,7 @@ class KEPModelORTools:
         self.manager = pywrapcp.RoutingIndexManager(
             len(self.data_model["cost_matrix"]),
             self.data_model["num_vehicles"],
-            self.data_model["starts"],
-            self.data_model["ends"],
+            self.data_model["depot"]
         )
 
         # Create Routing Model.
@@ -102,8 +101,8 @@ class KEPModelORTools:
                 bool_same_vehicle = self.routing.VehicleVar(
                     index_i
                 ) == self.routing.VehicleVar(index_j)
-                bool_is_altruist_j = self.data_model["is_altruist"][j]
-                bool_is_adj_i_j = self.data_model["is_adjacent"][i][j]
+                bool_is_altruist_j = j in self.data_model["N"]
+                bool_is_adj_i_j = self.data_model["cost_matrix"][i][j] < self.data_model["weight_limit"]
                 bool_is_len_cycle_resp = (
                     _capacity_dimension.CumulVar(index_i) <= self.data_model["K"] - 1
                 )
