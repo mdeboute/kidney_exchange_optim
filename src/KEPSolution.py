@@ -85,7 +85,7 @@ class KEPSolution:
         )
         try:
             with open(file_path, "w") as f:
-                f.write(str(self.objective_value) + "\n")
+                f.write("obj: " + str(self.objective_value) + "\n")
                 for path in self.list_of_paths:
                     f.write(" ".join([str(i) for i in path]) + "\n")
         except Exception as e:
