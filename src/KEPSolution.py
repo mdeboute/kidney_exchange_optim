@@ -28,8 +28,12 @@ class KEPSolution:
     def __repr__(self):
         return self.__str__()
 
+    def check_fasailability(self):
+        # TODO: check if the solution is feasible
+
     def write(self, file_path: str):
         with open(file_path, "w") as f:
             f.write(str(self.objective_value) + "\n")
             for path in self.list_of_paths:
                 f.write(" ".join([str(i) for i in path]) + "\n")
+
