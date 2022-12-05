@@ -19,7 +19,8 @@ class KEPSolution:
 
     def __str__(self):
         return (
-            self.name
+            "Solution n°"
+            + self.instance.name
             + ": objective value = "
             + str(self.objective_value)
             + ". Number of paths: "
