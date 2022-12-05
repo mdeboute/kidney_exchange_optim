@@ -27,8 +27,12 @@ def main():
         print(instance)
         model = KEPModelLocalSolver(instance=instance)
         model.solve(time_limit=time_limit)
-        #solution = model.solve(time_limit=time_limit)
-        #solution.write()
+        solution = model.solve(time_limit=time_limit)
+        if solution.check_feasibility():
+            solution.write()
+        else:
+            print("Solution is not feasible!")
+            exit(1)
     elif method == "OR":
         instance = KEPData(file_path=file_path, K=3, L=5)
         print(instance)

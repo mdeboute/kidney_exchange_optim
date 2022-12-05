@@ -33,13 +33,10 @@ class KEPModelLocalSolver:
         for i in instance.list_of_altruists:
             self.list_of_altruists[i - 1] = 1
 
-    def _create_solution(self) -> KEPSolution:
-        pass
-
     def solve(
         self,
         time_limit: int = 600,
-    ) -> KEPSolution:
+    )->KEPSolution :
 
         with localsolver.LocalSolver() as ls:
 
@@ -120,15 +117,15 @@ class KEPModelLocalSolver:
             ls.param.time_limit = time_limit
             ls.solve()
 
-            print("nb lists: " + str(self.nb_lists))
-            for k in range(self.nb_lists):
-                _sequence_to_text = ""
-                # if len(self.couples_sequences[k].value) == 1:
-                #    continue
+            result = []
+            for k in range(self.nb_lists - 1):
+                if len(self.couples_sequences[k].value) == 1:
+                    continue
+                tmp = []
                 for c in self.couples_sequences[k].value:
-                    if c >= self.nb_vertices_first:
-                        c = "*"
-                    _sequence_to_text += str(c) + " "
-                print(_sequence_to_text)
+                    tmp.append(c+1)
+                if not self.list_of_altruists[tmp[0]]:
+                    tmp.append(tmp[0])
+                result.append(tmp)
 
-        return self._create_solution()
+            return KEPSolution(self.instance, total_weight.value, result)
