@@ -67,7 +67,8 @@ class KEPSolution:
 
         return True
 
-    def write(self, file_path: str):
+    def write(self):
+        file_path = self._SOLUTION_DIR + self.instance.name + ".txt"
         with open(file_path, "w") as f:
             f.write(str(self.objective_value) + "\n")
             for path in self.list_of_paths:
