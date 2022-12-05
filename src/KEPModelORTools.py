@@ -1,6 +1,7 @@
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 from KEPData import KEPData
+from KEPSolution import KEPSolution
 
 
 class KEPModelORTools:
@@ -115,6 +116,22 @@ class KEPModelORTools:
         print("Total distance of all routes: {}m".format(total_distance))
         print("Total load of all routes: {}".format(total_load))
 
+    def _create_solution(self, solution) -> KEPSolution:
+        """Returns a KEPSolution object from a solution."""
+        list_of_routes = []
+        for vehicle_id in range(self.data_model["num_vehicles"]):
+            index = self.routing.Start(vehicle_id)
+            route = []
+            while not self.routing.IsEnd(index):
+                node_index = self.manager.IndexToNode(index)
+                route.append(node_index)
+                index = solution.Value(self.routing.NextVar(index))
+            route.append(self.manager.IndexToNode(index))
+            list_of_routes.append(route)
+        return KEPSolution(
+            self.instance.name, solution.ObjectiveValue(), list_of_routes
+        )  # TODO: verify this
+
     def solve(self, time_limit: int = 600):
         # Setting first solution heuristic.
         search_parameters = pywrapcp.DefaultRoutingSearchParameters()
@@ -132,5 +149,7 @@ class KEPModelORTools:
         # Print solution on console.
         if solution:
             self._print_solution(self, solution)
+            return self._create_solution(self, solution)
         else:
             print("No Solution!")
+            exit(1)
