@@ -36,7 +36,7 @@ class KEPModelLocalSolver:
     def solve(
         self,
         time_limit: int = 600,
-    )->KEPSolution :
+    ) -> KEPSolution:
 
         with localsolver.LocalSolver() as ls:
 
@@ -123,7 +123,7 @@ class KEPModelLocalSolver:
                     continue
                 tmp = []
                 for c in self.couples_sequences[k].value:
-                    tmp.append(c+1)
+                    tmp.append(c + 1)
                 if not self.list_of_altruists[tmp[0]]:
                     tmp.append(tmp[0])
                 result.append(tmp)
