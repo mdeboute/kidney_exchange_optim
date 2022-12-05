@@ -30,7 +30,7 @@ def main():
         solution.write()
     elif method == "OR":
         model = KEPModelLocalSolver(instance=instance)
-        print("OR method not implemented yet")
+        model.solve(time_limit=time_limit)
     else:
         print("Unknown method: " + method)
         print("Available methods: LS, OR")
