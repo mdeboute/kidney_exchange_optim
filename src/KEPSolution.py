@@ -9,7 +9,7 @@ class KEPSolution:
         self,
         instance_name: str,
         objective_value: int,
-        list_of_paths: list([list(int)]),
+        list_of_paths: list([list([int])]),
     ):
         self.instance_name = instance_name
         self.objective_value = objective_value

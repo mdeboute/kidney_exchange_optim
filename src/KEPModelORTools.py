@@ -7,33 +7,44 @@ from KEPSolution import KEPSolution
 class KEPModelORTools:
     def _create_data_model(self):
         """Stores the data for the problem."""
-        max_weight = max([max(self.instance.adjacency_matrix[i]) for i in range(nb_Vertices)])
-        U = 10 * max_weight * self.instance.nb_edges   # distance between non adjacent vertices
-        data_model= {}
-        data_model['N'] = self.instance.list_of_altruists()
-        data_model['V'] = [i for i in range(1, self.instance.nb_vertices+1)]
-        data_model['P'] = [i for i in data_model['V']) if i not in data_model['N']]
-        data_model['L'] = self.instance.L
-        data_model['K'] = self.instance.K
-        data_model['weight_limit'] = U
-        data_model['cost_matrix'] = [] 
-        for i in range(self.instance.nb_vertices+1):
+        max_weight = max(
+            [
+                max(self.instance.adjacency_matrix[i])
+                for i in range(self.instance.nb_vertices)
+            ]
+        )
+        U = (
+            10 * max_weight * self.instance.nb_edges
+        )  # distance between non adjacent vertices
+        data_model = {}
+        data_model["N"] = self.instance.list_of_altruists
+        data_model["V"] = [i for i in range(1, self.instance.nb_vertices)]
+        data_model["P"] = [i for i in data_model["V"] if i not in data_model["N"]]
+        data_model["L"] = self.instance.L
+        data_model["K"] = self.instance.K
+        data_model["weight_limit"] = U
+        data_model["cost_matrix"] = []
+        for i in range(self.instance.nb_vertices):
             cost_line_i = []
-            for j in range(self.instance.nb_vertices+1):
-                if i==j:
+            for j in range(self.instance.nb_vertices):
+                if i == j:
                     cost_line_i.append(0)
-                elif i==0 or j==0:
+                elif i == 0 or j == 0:
                     cost_line_i.append(max_weight)
-                elif self.instance.adjacency_matrix[i-1][j-1]==0:
+                elif self.instance.adjacency_matrix[i][j] == 0:
                     cost_line_i.append(U)
                 else:
-                    cost_line_i.append(max_weight - self.instance.adjacency_matrix[i-1][j-1])
-            data_model['cost_matrix'].append(cost_line_i)
+                    cost_line_i.append(
+                        max_weight - self.instance.adjacency_matrix[i][j]
+                    )
+            data_model["cost_matrix"].append(cost_line_i)
 
-        data_model['num_vehicles'] = len(data_model['V'])
-        data_model['demands'] = [0] + [1 for i in range(len(data_model['V']))]
-        data_model['vehicle_capacities'] = [data_model['L'] for i in range(data_model['num_vehicles'])]
-        data_model['depot'] = 0
+        data_model["num_vehicles"] = len(data_model["V"])
+        data_model["demands"] = [0] + [1 for _ in range(len(data_model["V"]))]
+        data_model["vehicle_capacities"] = [
+            data_model["L"] for _ in range(data_model["num_vehicles"])
+        ]
+        data_model["depot"] = 0
 
         return data_model
 
@@ -58,7 +69,7 @@ class KEPModelORTools:
         self.manager = pywrapcp.RoutingIndexManager(
             len(self.data_model["cost_matrix"]),
             self.data_model["num_vehicles"],
-            self.data_model["depot"]
+            self.data_model["depot"],
         )
 
         # Create Routing Model.
@@ -102,7 +113,10 @@ class KEPModelORTools:
                     index_i
                 ) == self.routing.VehicleVar(index_j)
                 bool_is_altruist_j = j in self.data_model["N"]
-                bool_is_adj_i_j = self.data_model["cost_matrix"][i][j] < self.data_model["weight_limit"]
+                bool_is_adj_i_j = (
+                    self.data_model["cost_matrix"][i][j]
+                    < self.data_model["weight_limit"]
+                )
                 bool_is_len_cycle_resp = (
                     _capacity_dimension.CumulVar(index_i) <= self.data_model["K"] - 1
                 )
@@ -125,7 +139,7 @@ class KEPModelORTools:
             route_load = 0
             while not self.routing.IsEnd(index):
                 node_index = self.manager.IndexToNode(index)
-                route_load += self.data["demands"][node_index]
+                route_load += self.data_model["demands"][node_index]
                 plan_output += " {0} Load({1}) -> ".format(node_index, route_load)
                 previous_index = index
                 index = solution.Value(self.routing.NextVar(index))
@@ -175,8 +189,8 @@ class KEPModelORTools:
 
         # Print solution on console.
         if solution:
-            self._print_solution(self, solution)
-            return self._create_solution(self, solution)
+            self._print_solution(solution)
+            return self._create_solution(solution)
         else:
             print("No Solution!")
             exit(1)

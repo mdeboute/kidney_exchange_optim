@@ -1,6 +1,7 @@
 import sys
 from KEPData import KEPData
 from KEPModelLocalSolver import KEPModelLocalSolver
+from KEPModelORTools import KEPModelORTools
 
 
 def print_usage():
@@ -21,15 +22,16 @@ def main():
     if len(argv) == 3:
         time_limit = int(argv[2])
 
-    instance = KEPData(file_path=file_path, K=3, L=3)
+    instance = KEPData(file_path=file_path, K=3, L=4)
     print(instance)
+    print(instance.adjacency_matrix)
 
     if method == "LS":
         model = KEPModelLocalSolver(instance=instance)
         solution = model.solve(time_limit=time_limit)
         solution.write()
     elif method == "OR":
-        model = KEPModelLocalSolver(instance=instance)
+        model = KEPModelORTools(instance=instance)
         model.solve(time_limit=time_limit)
     else:
         print("Unknown method: " + method)

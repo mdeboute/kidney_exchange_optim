@@ -28,10 +28,10 @@ class KEPData:
                 nb_edges = int(data[1].split(":")[1])
                 # from line 12 to line 12 + nb_vertices - 1, count the number of line with "Alturist" and put it in a list
                 list_of_altruists = []
-                for line in data[3 : nb_vertices + 2]:
+                for line in data[2 : 2 + nb_vertices]:
                     if "Alturist" in line:
                         list_of_altruists.append(int(line.split(" ")[-1]))
-                # from line 11 skip all the lines that begins with #
+                # from line 12 skip all the lines that begins with #
                 data = [line for line in data[2:] if not line.startswith("#")]
                 # now the data looks like this: "1,5,1.0" where 1 is the source vertex, 5 is the destination vertex and 1.0 is the weight
                 # save all this information in an adjacency matrix
