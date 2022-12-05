@@ -23,21 +23,28 @@ class KEPModelORTools:
         data_model["L"] = self.instance.L
         data_model["K"] = self.instance.K
         data_model["weight_limit"] = U
-        data_model["cost_matrix"] = []
-        for i in range(self.instance.nb_vertices + 1):
+        cost_matrix = []
+        for i in range(1, self.instance.nb_vertices + 1):
             cost_line_i = []
             for j in range(self.instance.nb_vertices + 1):
-                if i == j:
+                if j == 0:
                     cost_line_i.append(0)
-                elif i == 0 or j == 0:
-                    cost_line_i.append(max_weight)
                 elif self.instance.adjacency_matrix[i][j] == 0:
                     cost_line_i.append(U)
                 else:
                     cost_line_i.append(
-                        max_weight - self.instance.adjacency_matrix[i][j]
+                        max_weight + 1 - self.instance.adjacency_matrix[i][j]
                     )
-            data_model["cost_matrix"].append(cost_line_i)
+            cost_matrix.append(cost_line_i)
+
+        cost_line_0 = []
+        for j in range(self.instance.nb_vertices + 1):
+            if j==0 or (j in self.instance.list_of_altruists):
+                cost_line_0.append(0)
+            else:
+                cost_line_0.append(1+ max([cost_matrix[i][j]%U for i in range(self.instance.nb_vertices)]))
+
+        data_model["cost_matrix"] = [cost_line_0] + cost_matrix
 
         data_model["num_vehicles"] = len(data_model["V"])
         data_model["demands"] = [0] + [1 for _ in range(len(data_model["V"]))]
