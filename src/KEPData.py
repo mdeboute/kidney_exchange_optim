@@ -55,8 +55,8 @@ class KEPData:
                 adjacency_matrix,
                 list_of_edges,
             )
-        except FileNotFoundError:
-            print("Error: File not found.")
+        except Exception as e:
+            print("Error: " + str(e) + ".")
             exit(1)
 
     def __init__(self, file_path: str, K: int, L: int):

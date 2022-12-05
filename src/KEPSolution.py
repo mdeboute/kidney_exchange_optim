@@ -52,7 +52,7 @@ class KEPSolution:
 
         # check if the length of each cycle is less or equal to K
         for path in self.list_of_paths:
-            if self._is_cycle(path) and len(path) > self.instance.K:
+            if self._is_cycle(path) and len(path) - 1 > self.instance.K:
                 print(
                     (
                         "Error: cycle "
@@ -63,7 +63,18 @@ class KEPSolution:
                 )
                 return False
 
-        # to finish
+        # check that each node of a path are adjacent
+        for path in self.list_of_paths:
+            for i in range(len(path) - 1):
+                if path[i + 1] not in self.instance.get_adjacency_list()[path[i]]:
+                    print(
+                        "Error: nodes "
+                        + str(path[i])
+                        + " and "
+                        + str(path[i + 1])
+                        + " are not adjacent."
+                    )
+                    return False
 
         return True
 
@@ -71,7 +82,12 @@ class KEPSolution:
         file_path = KEPSolution._SOLUTION_DIR / (
             "result_" + self.instance.name + ".txt"
         )
-        with open(file_path, "w") as f:
-            f.write(str(self.objective_value) + "\n")
-            for path in self.list_of_paths:
-                f.write(" ".join([str(i) for i in path]) + "\n")
+        try:
+            with open(file_path, "w") as f:
+                f.write(str(self.objective_value) + "\n")
+                for path in self.list_of_paths:
+                    f.write(" ".join([str(i) for i in path]) + "\n")
+        except Exception as e:
+            print("Error: " + str(e))
+            exit(1)
+        print("Solution written to " + str(file_path))

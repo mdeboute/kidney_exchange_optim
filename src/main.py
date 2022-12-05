@@ -31,7 +31,10 @@ def main():
     elif method == "OR":
         model = KEPModelORTools(instance=instance)
         solution = model.solve(time_limit=time_limit)
-        solution.write()
+        if solution.check_feasibility():
+            solution.write()
+        else:
+            print("Solution is not feasible!")
     else:
         print("Unknown method: " + method)
         print("Available methods: LS, OR")

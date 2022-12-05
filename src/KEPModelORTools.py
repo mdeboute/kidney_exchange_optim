@@ -200,7 +200,7 @@ class KEPModelORTools:
 
         # Print solution on console.
         if solution:
-            self._print_solution(solution)
+            # self._print_solution(solution)
             return self._create_solution(solution)
         else:
             print("No Solution!")
