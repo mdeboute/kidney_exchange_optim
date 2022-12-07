@@ -1,7 +1,7 @@
 # FILE NAME: toy_instance
 # TITLE: Kidney Matching - 7 with 2
 # DESCRIPTION: x
-# DATA TYPE: wmd
+# DATA TYPE: txt
 # MODIFICATION TYPE: synthetic
 # RELATES TO: x
 # RELATED FILES: original
