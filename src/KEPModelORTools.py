@@ -7,6 +7,7 @@ from KEPSolution import KEPSolution
 class KEPModelORTools:
     def _create_data_model(self):
         """Stores the data for the problem."""
+
         max_weight = max(
             [
                 max(self.instance.adjacency_matrix[i])
@@ -39,10 +40,18 @@ class KEPModelORTools:
 
         cost_line_0 = []
         for j in range(self.instance.nb_vertices + 1):
-            if j==0 or (j in self.instance.list_of_altruists):
+            if j == 0 or (j in self.instance.list_of_altruists):
                 cost_line_0.append(0)
             else:
-                cost_line_0.append(1+ max([cost_matrix[i][j]%U for i in range(self.instance.nb_vertices)]))
+                cost_line_0.append(
+                    1
+                    + max(
+                        [
+                            cost_matrix[i][j] % U
+                            for i in range(self.instance.nb_vertices)
+                        ]
+                    )
+                )
 
         data_model["cost_matrix"] = [cost_line_0] + cost_matrix
 
@@ -58,6 +67,7 @@ class KEPModelORTools:
     # Create and register a transit callback.
     def _distance_callback(self, from_index, to_index):
         """Returns the distance between the two nodes."""
+
         # Convert from routing variable Index to distance matrix NodeIndex.
         from_node = self.manager.IndexToNode(from_index)
         to_node = self.manager.IndexToNode(to_index)
@@ -65,6 +75,7 @@ class KEPModelORTools:
 
     def _demand_callback(self, from_index):
         """Returns the demand of the node."""
+
         # Convert from routing variable Index to demands NodeIndex.
         from_node = self.manager.IndexToNode(from_index)
         return self.data_model["demands"][from_node]
@@ -166,6 +177,7 @@ class KEPModelORTools:
 
     def _create_solution(self, solution) -> KEPSolution:
         """Returns a KEPSolution object from a solution."""
+
         list_of_routes = []
         total_cost = 0
         for vehicle_id in range(self.data_model["num_vehicles"]):
@@ -210,5 +222,5 @@ class KEPModelORTools:
             # self._print_solution(solution)
             return self._create_solution(solution)
         else:
-            print("No Solution!")
+            print("No solution found!")
             exit(1)

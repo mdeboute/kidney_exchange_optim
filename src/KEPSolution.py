@@ -34,10 +34,6 @@ class KEPSolution:
         return path[0] == path[-1]
 
     def check_feasibility(self):
-        # check if the solution is feasible
-        # the maximum length of a path is L
-        # the maximum length of a cycle is K
-
         # check if the length of each path is less or equal to L
         for path in self.list_of_paths:
             if not self._is_cycle(path) and len(path) > self.instance.L:
