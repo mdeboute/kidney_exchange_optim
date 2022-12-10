@@ -14,4 +14,4 @@ Type `./benchmark.sh -h` for help.
 
 The code also works with weighted instances by the way (***e.g.*** [data/000.txt](data/000.txt)).
 
-## [Overleaf report](<https://www.overleaf.com/4511231254sgdqqfxtqnqv>)
+## [French report](report.pdf)
