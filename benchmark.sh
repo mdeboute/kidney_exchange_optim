@@ -27,6 +27,6 @@ for instance in `ls $1` ; do
     python3 src/main.py $1/$instance $2 $time_limit
 done
 
-grep "obj:" solutions/*.txt >> log/$2/results_$3s.csv
+grep "obj:" solutions/*.txt >> log/$2/results_$time_limit.csv
 
 exit 0
